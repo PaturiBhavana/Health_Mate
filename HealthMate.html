@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Health Assistant</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { text-align: center; background-color: #f4f4f4; }
+        nav { background: #007bff; padding: 10px; position: fixed; width: 100%; top: 0; z-index: 1000; }
+        nav a { color: white; margin: 0 15px; text-decoration: none; font-size: 18px; cursor: pointer; }
+        section {  display: none; padding: 80px 20px; min-height: 100vh; }
+        .active { display: block; }
+        input, button, textarea { display: block; margin: 10px auto; padding: 10px; width: 80%; max-width: 400px; }
+        button { background: #28a745; color: white; border: none; cursor: pointer; font-size: 16px; }
+        button:hover { background: #218838; }
+        table { margin: 20px auto; border-collapse: collapse; width: 90%; max-width: 600px; display: none; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #007bff; color: white; }
+        .highlight { color: red; font-weight: bold; }
+        .speak-button { background: blue; font-size: 18px; padding: 12px; border-radius: 5px; }
+        .speak-button:hover { background: blue; }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Menu -->
+    <nav>
+        <a onclick="showSection('home')">Home</a>
+        <a onclick="showSection('health-checker')">Health Checker</a>
+        <a onclick="showSection('voice-checker')">Voice Health Checker</a>
+        <a onclick="showSection('medicine')">Medicine Prescription</a>
+        <a onclick="showSection('feedback')">Feedback</a>
+        
+        <a onclick="showSection('about')">About</a>
+        
+        
+    </nav>
+
+    <!-- Home Page -->
+    <section id="home" style="background: linear-gradient(to right, lightpink, lightblue);">
+        <h1>Welcome to Healthmate</h1>
+        <br>
+        <br>
+        <p style="color: black;">Your personal  Smart Health companion 🏥.</p>
+        
+            <br>
+            <br>
+            <p>Our  Smart health assistant provides real-time health analysis based on your symptoms. Get instant health guidance and medicine recommendations.</p>
+          <br>
+          <br>
+            <p>This platform is designed to help users track their health status with smart integration. It stores past health records and even provides voice-based health assessments.</p>
+          <br>
+        <br>
+            <p><b>Stay healthy and get AI-powered insights with just a few clicks. Your wellness is our priority!<b></p>
+    </section>
+
+    <!-- Health Checker Page -->
+    <section id="health-checker" style="background: linear-gradient(to right, lightpink, lightblue);">
+        <h2>Health Checker</h2>
+        <br>
+        <p><b>Please kindly enter your details and problem you are facing.....</b></p>
+        <input type="text" id="name" placeholder="Enter your Name">
+        <input type="number" id="age" placeholder="Enter your Age">
+        <input type="text" id="temperature" placeholder="Enter Temperature (°C)">
+        <input type="text" id="bloodPressure" placeholder="Enter Blood Pressure">
+        <input type="text" id="heartRate" placeholder="Enter Heart Rate">
+        <input type="text" id="symptoms" placeholder="Enter Symptoms">
+        <button onclick="analyzeHealth()">Check Health</button>
+        <p id="health-result"></p>
+        <button onclick="showPastRecords()">View Past Records</button>
+        <table id="past-records">
+            <tr>
+                <th>Name</th><th>Age</th><th>Symptoms</th><th>Disease</th><th>Advice</th>
+            </tr>
+        </table>
+    </section>
+
+    <!-- Voice-Based Health Checker -->
+    <section id="voice-checker" style="background: linear-gradient(to right, lightpink, lightblue);">
+        <h2>Voice Health Checker</h2>
+        <br>
+        <br>
+        <br>
+        <p>click on the button to talk</p>
+        <br>
+        <br>
+        <button class="speak-button" onclick="startVoiceRecognition()">🎤 Speak Symptoms</button>
+        <p id="voice-text"></p>
+        <p id="voice-result"></p>
+    </section>
+
+    <!-- Medicine Suggestion -->
+    <section id="medicine"   style="background: linear-gradient(to right, lightpink, lightblue);">
+        <h2>Medicine Suggestion</h2>
+        <input type="text" id="medicineInput" placeholder="Enter your symptom">
+        <button onclick="getMedicine()">Get Medicine</button>
+        <p id="medicine-result"></p>
+    </section>
+
+     <!-- Feedback Page -->
+     <section id="feedback" style="background: linear-gradient(to right, lightpink, lightblue);">
+        <h2 style="color: #007bff;">HealthMate Feedback Form</h2>
+        <br>
+        <br>
+        <br>
+    <p>We value your feedback! Please share your experience with us.</p>
+    <br>
+
+    <form id="feedbackForm" style="background: white; padding: 20px; border-radius: 10px; 
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); width: 80%; max-width: 500px; margin: auto;">
+        
+        <input type="text" id="name" placeholder="Enter your Name" required 
+               style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; 
+               border-radius: 5px; font-size: 16px;">
+        
+        <input type="number" id="age" placeholder="Enter your Age" required 
+               style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; 
+               border-radius: 5px; font-size: 16px;">
+        
+        <input type="text" id="contact" placeholder="Enter your Contact (Optional)" 
+               style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; 
+               border-radius: 5px; font-size: 16px;">
+        
+        <select id="experience" required 
+                style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; 
+                border-radius: 5px; font-size: 16px;">
+            <option value="">Rate Your Experience</option>
+            <option value="Excellent">Excellent</option>
+            <option value="Good">Good</option>
+            <option value="Average">Average</option>
+            <option value="Poor">Poor</option>
+        </select>
+        
+        <textarea id="feedbackText" rows="4" placeholder="Write your feedback here..." required 
+                  style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; 
+                  border-radius: 5px; font-size: 16px;"></textarea>
+        
+        <button type="button" onclick="submitFeedback()" 
+                style="background: #28a745; color: white; border: none; padding: 10px; 
+                font-size: 16px; cursor: pointer; width: 100%; border-radius: 5px;">
+            Submit Feedback
+        </button>
+    </form>
+
+    <p id="thankYouMessage" style="color: green; font-weight: bold; margin-top: 20px; display: none;">
+        Thank you for your feedback!
+    </p>
+
+    </section>
+
+    <!-- About Page -->
+    <section id="about" style="background: linear-gradient(to right, lightpink, lightblue);">
+        <p>
+        
+        Welcome to our AI-Driven Health Assistant, an innovative web page designed to help users check their health conditions, get medicine suggestions, and receive AI-based voice assistance for symptoms.
+        <br>
+        <br>
+        <br>
+        <br>
+        Creators:
+        <br>
+       Paturi Bhavana - Devoloper and UI designer
+        <br>
+       Maddila Chaitanya Priya - Devoloper and Research Assistant
+        
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        
+        
+        Creation :
+
+        Developed during HackForge 1.0, a competitive hackathon where we aimed to build a smart and user-friendly health assistant.
+        
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+    
+        
+        Motto:
+
+        "Your Health, Our Priority – Smart Solutions for a Better Life!"
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        
+        Purpose:
+        
+        Our goal is to make healthcare information easily accessible by integrating AI-driven features that provide instant health insights based on symptoms, past records, and medicine suggestions.
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        
+        Uses & Features:
+        <br>
+        
+        ✔ Health Checker: Analyze symptoms and get disease predictions with advice.<br>
+        ✔ Voice Health Checker: Speak your symptoms and receive AI-driven responses.<br>
+        ✔ Medicine Suggestions: Get recommended medicines for various health conditions.<br>
+        ✔ Past Records: Keep track of previous health reports.<br>
+        ✔ Interactive UI: A visually appealing and dynamic interface for a better user experience.<br>
+        <br>
+        <br>
+        <br>
+        <br>
+        
+        Conclusion:
+        <br>
+        
+        This health assistant is our step toward making healthcare smarter and more accessible. We hope this platform benefits users by offering quick and reliable health insights. As we continue improving, we look forward to adding more advanced features for a better healthcare experience.
+        </pre>
+        </p>
+
+    <br>
+    <br>
+    Scroll down for contact details
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br><br>
+<br>
+<br>
+<br>
+<br><br>
+
+
+
+
+    <!-- Contact Page -->
+    
+        <h2>Contact Us</h2>
+        <br>
+        <p>If you need any further assistance, feel free to contact us.</p>
+        <br>
+        <p><strong>Email:</strong> paturibhavana081@gmail.com</p>
+        <br>
+        <p><strong>Contact Number:</strong> 8688448209</p>
+        <br>
+        <p>We are always here to help you!</p>
+    </section>
+
+    <!-- JavaScript -->
+    <script>
+        let pastRecords = [];
+
+        function showSection(sectionId) {
+            document.querySelectorAll("section").forEach(section => section.classList.remove("active"));
+            document.getElementById(sectionId).classList.add("active");
+        }
+
+        function analyzeHealth() {
+            let name = document.getElementById("name").value;
+            let age = document.getElementById("age").value;
+            let symptoms = document.getElementById("symptoms").value.toLowerCase();
+            let disease = "";
+            let advice = "";
+
+            if (symptoms.includes("headache")) { disease = "Migraine"; advice = "Take Rest, stay hydrated and avoid bright lights."; }
+            else if (symptoms.includes("cough")) { disease = "Cold/Flu"; advice = "Drink warm fluids, take rest and vitamin C."; }
+            else if (symptoms.includes("stomach pain" )) {disease = "indigestion/food poisoning"; advice = "Eat light food,drink warm water and take antacids"; }
+            else if (symptoms.includes("fever")) { disease = "Viral Infection"; advice = "Drink water, take paracetamol and rest."; }
+            else if (symptoms.includes("fatigue")) { disease = "Anemia/Viatmin defficiency"; advice = "Eat iron rich foods,Get enough sleep and Stay hydrated"; }
+            else if (symptoms.includes("chest pain")) { disease = "Acid reflux/Muscle strain"; advice = "Avoid heavy meals and practice relaxation techniques"; }
+            else if (symptoms.includes("nausea/vomiting")) { disease = "Food poisoning/gastric issues"; advice = "Drink ginger tea,Stay hydrated and avoid oily or spicy foods"; }
+            else if (symptoms.includes("breathing problem")) { disease = "Asthma/allergies/Anxiety"; advice = "Avoid allergens and practice breathing exercises,"; } 
+            else { disease = "No serious symptoms detected"; advice = "Maintain a healthy lifestyle."; }
+
+            document.getElementById("health-result").innerHTML = 
+                `<span class='highlight'>Disease:</span> ${disease}<br>
+                 <span class='highlight'>Advice:</span> ${advice}`;
+
+            // Save to past records
+            pastRecords.push({ name, age, symptoms, disease, advice });
+        }
+
+        function showPastRecords() {
+            let table = document.getElementById("past-records");
+            table.innerHTML = "<tr><th>Name</th><th>Age</th><th>Symptoms</th><th>Disease</th><th>Advice</th></tr>"; 
+            pastRecords.forEach(record => {
+                let row = `<tr>
+                    <td>${record.name}</td>
+                    <td>${record.age}</td>
+                    <td>${record.symptoms}</td>
+                    <td class='highlight'>${record.disease}</td>
+                    <td class='highlight'>${record.advice}</td>
+                </tr>`;
+                table.innerHTML += row;
+            });
+            table.style.display = "table";
+        }
+
+        function startVoiceRecognition() {
+            let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.onresult = function(event) {
+                let spokenText = event.results[0][0].transcript;
+                document.getElementById("voice-text").innerText = "Detected Symptom: " + spokenText;
+                document.getElementById("symptoms").value = spokenText;
+                analyzeHealth();
+                let resultText = document.getElementById("health-result").innerText;
+                document.getElementById("voice-result").innerText = resultText;
+                speakAdvice(resultText);
+            };
+            recognition.start();
+        }
+
+        function speakAdvice(text) {
+            let speech = new SpeechSynthesisUtterance(text);
+            speech.lang = "en-US";
+            window.speechSynthesis.speak(speech);
+        }
+        function getMedicine() {
+            let symptom = document.getElementById("medicineInput").value.toLowerCase();
+            let medicines = { "headache": "Paracetamol, Ibuprofen", "cough": "Cough Syrup, Honey Tea" ,"fever":"DOLO 650,Paracetomal", "stomach pain": "Antacids: Gelusil,Digene,Rantac","fatigue":"Iron supplements-ferrous sulphate,Multivitamins:Supradyn,Revital,Folic acid tablets","breathing problem": " SalbotamolInhaler, Montelukast,Lorazepam","nausea/vomiting": "Domperidone(For Nausea),Ondasetron(Vomiting)","Chest pain":"Antacids:Gelusil,Digene,Aspirin,Pantoprazole"};
+            document.getElementById("medicine-result").innerText = medicines[symptom] || "No medicine suggestions available.";
+        }
+        function submitFeedback() {
+            let name = document.getElementById("name").value;
+            let age = document.getElementById("age").value;
+            let experience = document.getElementById("experience").value;
+            let feedback = document.getElementById("feedbackText").value;
+
+            if (name && age && experience && feedback) {
+                document.getElementById("thankYouMessage").style.display = "block";
+                document.getElementById("feedbackForm").reset();
+                setTimeout(() => {
+                    document.getElementById("thankYouMessage").style.display = "none";
+                }, 3000);
+            } else {
+                alert("Please fill in all required fields.");
+            }
+        }
+        
+        
+
+
+    </script>
+
+</body>
+</html>
